@@ -1,0 +1,26 @@
+{
+  "name": "zhay-api",
+  "version": "1.0.0",
+  "description": "Node.js and MySQL API",
+  "main": "index.js",
+  "scripts": {
+    "build": "docker-compose build",
+    "clean:cache": "docker-compose rm -f",
+    "start": "nodemon ./src/server.js",
+    "start:background": "docker-compose up -d"
+  },
+  "author": "Felipe Carvalho",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  },
+  "dependencies": {
+    "body-parse": "^0.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "knex": "^2.5.1",
+    "mysql2": "^2.3.3"
+  }
+}
