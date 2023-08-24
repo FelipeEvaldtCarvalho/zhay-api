@@ -1,7 +1,4 @@
 require("dotenv").config();
-const path = require("path");
-
-console.log("./src/database/migrations");
 
 /**
  * @type { Object.<string, import("knex").Knex.Config> }
@@ -16,6 +13,12 @@ module.exports = {
       password: process.env.DATABASE_PASS,
       database: process.env.DATABASE_NAME,
     },
+    migrations: {
+      directory: "./src/database/migrations",
+    },
+    seeds: {
+      directory: "./src/database/seeds",
+    },
   },
   development: {
     client: "mysql2",
@@ -25,6 +28,12 @@ module.exports = {
       user: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASS,
       database: process.env.DATABASE_NAME,
+    },
+    migrations: {
+      directory: "./src/database/migrations",
+    },
+    seeds: {
+      directory: "./src/database/seeds",
     },
   },
 };
