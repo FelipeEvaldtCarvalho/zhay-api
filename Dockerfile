@@ -7,6 +7,8 @@ COPY .env /.env
 COPY . .
 
 RUN npm install
+RUN npm i knex -g
+RUN knex migrate:latest
 
 EXPOSE 3001
 

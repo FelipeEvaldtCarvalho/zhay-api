@@ -23,7 +23,6 @@ services:
     image: mysql:latest
     ports:
       - 3306:3306
-    # restart: always
     volumes:
       - db-config:/etc/mysql
       - db-data:/var/lib/mysql

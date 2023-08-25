@@ -61,7 +61,7 @@ exports.up = (knex) => {
         .unsigned()
         .references("id")
         .inTable("variants");
-      table.unique(["product_id", "variant_id"]).primary();
+      table.primary(["product_id", "variant_id"]);
     })
     .createTable("carts", (table) => {
       table.increments("id").primary();
