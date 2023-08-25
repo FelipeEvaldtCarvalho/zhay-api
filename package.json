@@ -12,13 +12,16 @@
   "author": "Felipe Carvalho",
   "license": "ISC",
   "devDependencies": {
+    "axios": "^1.4.0",
     "nodemon": "^2.0.7"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parse": "^0.1.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "jsonwebtoken": "^9.0.1",
     "knex": "^2.5.1",
     "mysql2": "^2.3.3"
   }
