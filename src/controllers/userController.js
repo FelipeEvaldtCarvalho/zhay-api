@@ -3,6 +3,7 @@ const { generateHash } = require("../services/bcrypt.js");
 const User = require("../models/index.js")({
   name: "users",
   tableName: "users",
+  selectableProps: ["id", "name", "email", "cpf", "phone"],
 });
 
 const UserController = {
@@ -11,6 +12,7 @@ const UserController = {
       const userData = req.body;
       const hashedPassword = await generateHash(userData.password_hash);
       userData.password_hash = hashedPassword;
+      userData.role = "customer";
       const newUser = await User.create(userData);
       return res.status(201).json(newUser);
     } catch (error) {
