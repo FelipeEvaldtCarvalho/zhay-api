@@ -22,9 +22,12 @@ exports.up = (knex) => {
         .inTable("users")
         .notNullable();
       table.string("street").notNullable();
-      table.string("city").notNullable();
-      table.string("state").notNullable();
+      table.integer("number").notNullable();
+      table.string("detail").notNullable();
       table.bigInteger("cep").notNullable();
+      table.string("city").notNullable();
+      table.string("district").notNullable();
+      table.string("state").notNullable();
       table.boolean("main").defaultTo(false).notNullable();
     })
     .createTable("categories", (table) => {
@@ -36,6 +39,24 @@ exports.up = (knex) => {
       table.string("name").notNullable();
       table.string("description");
       table.decimal("value", 10, 2).notNullable();
+      table.decimal("promotional_value", 10, 2);
+      table.integer("quantity");
+      table.string("code");
+      table.decimal("weight", 10, 4);
+      table.integer("dimension_length");
+      table.integer("dimension_width");
+      table.integer("dimension_height");
+    })
+    .createTable("product_images", (table) => {
+      table.increments("id").primary();
+      table
+        .integer("product_id")
+        .unsigned()
+        .references("id")
+        .inTable("products")
+        .notNullable();
+      table.string("name").notNullable();
+      table.string("url").notNullable();
     })
     .createTable("products_categories", (table) => {
       table
