@@ -1,11 +1,6 @@
 const { GraphQLList, GraphQLID } = require("graphql");
 const UserType = require("../types/user.js");
-
-const UserModel = require("../../models/index.js")({
-  name: "users",
-  tableName: "users",
-  selectableProps: ["id", "name", "email", "cpf", "phone"],
-});
+const UserController = require("../../controllers/userController.js");
 
 const userResolvers = {
   getUser: {
@@ -13,14 +8,9 @@ const userResolvers = {
     args: { id: { type: GraphQLID } },
     resolve: async (_, { id }) => {
       try {
-        const [user] = await UserModel.find({ id });
-        if (!user) {
-          console.log("User not found");
-          return new Error("User not found");
-        }
-        return user;
+        return await UserController.getUserById(id);
       } catch (error) {
-        throw new Error("Internal server error");
+        throw new Error(error);
       }
     },
   },
@@ -28,7 +18,7 @@ const userResolvers = {
     type: new GraphQLList(UserType),
     resolve: async () => {
       try {
-        return await UserModel.findAll();
+        return await UserController.getAllUsers();
       } catch (error) {
         throw new Error("Internal server error");
       }

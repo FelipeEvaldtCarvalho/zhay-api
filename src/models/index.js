@@ -11,9 +11,11 @@ module.exports = ({
     delete props.id;
     return knex.insert(props).into(tableName).timeout(timeout);
   };
+
   const findAll = () => {
     return knex.select(selectableProps).from(tableName).timeout(timeout);
   };
+
   const find = (filters) => {
     return knex
       .select(selectableProps)

@@ -5,6 +5,8 @@ const mutation = new GraphQLObjectType({
   name: "Mutation",
   fields: {
     createUser: userMutations.createUser,
+    updateUser: userMutations.updateUser,
+    deleteUser: userMutations.deleteUser,
   },
 });
 

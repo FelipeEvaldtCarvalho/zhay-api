@@ -7,68 +7,63 @@ const User = require("../models/index.js")({
 });
 
 const UserController = {
-  async createUser(req, res) {
+  async getAllUsers() {
     try {
-      const userData = req.body;
+      return await User.findAll();
+    } catch (error) {
+      throw new Error("Internal server error");
+    }
+  },
+
+  async getUserById(id) {
+    try {
+      const [user] = await User.find({ id });
+      if (!user) {
+        return new Error("User not found");
+      }
+      return user;
+    } catch (error) {
+      console.log(error);
+      throw new Error("Internal server error");
+    }
+  },
+
+  async createUser(args) {
+    try {
+      const userData = { ...args };
       const hashedPassword = await generateHash(userData.password_hash);
       userData.password_hash = hashedPassword;
       userData.role = "customer";
-      const newUser = await User.create(userData);
-      return res.status(201).json(newUser);
+      return await User.create(userData);
     } catch (error) {
       if (error.errno === 1062) {
-        return res.status(409).json({ error: "E-mail already registered!" });
+        throw new Error("E-mail already registered!");
       }
-      return res.status(500).json({ error: "Internal server error!" });
+      throw new Error("Internal server error!");
     }
   },
 
-  async getAllUsers(req, res) {
+  async updateUser(args) {
     try {
-      const users = await User.findAll();
-      return res.json(users);
-    } catch (error) {
-      return res.status(500).json({ error: "Internal server error" });
-    }
-  },
-
-  async getUserById(req, res) {
-    try {
-      const userId = req.params.id;
-      const user = await User.find({ id: userId });
-      if (!user || user.length === 0) {
-        return res.status(404).json({ error: "User not found" });
-      }
-      return res.json(user);
-    } catch (error) {
-      return res.status(500).json({ error: "Internal server error" });
-    }
-  },
-
-  async updateUser(req, res) {
-    try {
-      const userId = req.params.id;
-      const updatedUserData = req.body;
+      const userId = args.id;
+      const updatedUserData = { ...args };
       const updatedUser = await User.update(userId, updatedUserData);
-      if (!updatedUser || updatedUser.length === 0) {
-        return res.status(404).json({ error: "User not found" });
+      if (!updatedUser) {
+        throw new Error("User not found");
       }
-      return res.json(updatedUser);
     } catch (error) {
-      return res.status(500).json({ error: "Internal server error" });
+      throw new Error(error.message);
     }
   },
 
-  async deleteUser(req, res) {
+  async deleteUser(id) {
     try {
-      const userId = req.params.id;
-      const deletedUser = await User.destroy(userId);
+      const deletedUser = await User.destroy(id);
       if (!deletedUser || deletedUser.length === 0) {
-        return res.status(404).json({ error: "User not found" });
+        throw new Error("User not found");
       }
-      return res.json({ message: "User deleted successfully" });
     } catch (error) {
-      return res.status(500).json({ error: "Internal server error" });
+      throw new Error(error.message);
     }
   },
 };
