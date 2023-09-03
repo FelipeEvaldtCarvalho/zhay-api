@@ -5,6 +5,8 @@ const MessageType = new GraphQLObjectType({
   fields: {
     success: { type: GraphQLString },
     error: { type: GraphQLString },
+    token: { type: GraphQLString },
+    user: { type: GraphQLString },
   },
 });
 

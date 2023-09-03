@@ -3,7 +3,7 @@ const { generateHash } = require("../services/bcrypt.js");
 const User = require("../models/index.js")({
   name: "users",
   tableName: "users",
-  selectableProps: ["id", "name", "email", "cpf", "phone"],
+  selectableProps: ["id", "name", "email", "cpf", "phone", "password_hash"],
 });
 
 const UserController = {
@@ -62,6 +62,18 @@ const UserController = {
       if (!deletedUser || deletedUser.length === 0) {
         throw new Error("User not found");
       }
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  },
+
+  async findUsers(args) {
+    try {
+      const users = await User.find(args);
+      if (!users || !users.length) {
+        throw new Error("No user found");
+      }
+      return users;
     } catch (error) {
       throw new Error(error.message);
     }
