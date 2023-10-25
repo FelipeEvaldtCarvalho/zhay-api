@@ -1,10 +1,6 @@
 const { generateHash } = require("../services/bcrypt.js");
 
-const User = require("../models/index.js")({
-  name: "users",
-  tableName: "users",
-  selectableProps: ["id", "name", "email", "cpf", "phone", "password_hash"],
-});
+const User = require("../models/user.js");
 
 const UserController = {
   async getAllUsers() {
