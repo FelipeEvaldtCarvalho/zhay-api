@@ -20,7 +20,8 @@ exports.up = (knex) => {
         .unsigned()
         .references("id")
         .inTable("users")
-        .notNullable();
+        .notNullable()
+        .onDelete("CASCADE");
       table.string("street").notNullable();
       table.integer("number").notNullable();
       table.string("detail").notNullable();
@@ -54,7 +55,8 @@ exports.up = (knex) => {
         .unsigned()
         .references("id")
         .inTable("products")
-        .notNullable();
+        .notNullable()
+        .onDelete("CASCADE");
       table.string("name").notNullable();
       table.string("url").notNullable();
     })
@@ -64,13 +66,15 @@ exports.up = (knex) => {
         .unsigned()
         .references("id")
         .inTable("products")
-        .notNullable();
+        .notNullable()
+        .onDelete("CASCADE");
       table
         .integer("category_id")
         .unsigned()
         .references("id")
         .inTable("categories")
-        .notNullable();
+        .notNullable()
+        .onDelete("CASCADE");
       table.primary(["product_id", "category_id"]);
     })
     .createTable("variants", (table) => {
@@ -84,13 +88,15 @@ exports.up = (knex) => {
         .unsigned()
         .references("id")
         .inTable("products")
-        .notNullable();
+        .notNullable()
+        .onDelete("CASCADE");
       table
         .integer("variant_id")
         .unsigned()
         .references("id")
         .inTable("variants")
-        .notNullable();
+        .notNullable()
+        .onDelete("CASCADE");
       table.primary(["product_id", "variant_id"]);
     })
     .createTable("carts", (table) => {
@@ -100,7 +106,8 @@ exports.up = (knex) => {
         .unsigned()
         .references("id")
         .inTable("users")
-        .notNullable();
+        .notNullable()
+        .onDelete("CASCADE");
     })
     .createTable("cart_items", (table) => {
       table.increments("id").primary();
@@ -109,20 +116,27 @@ exports.up = (knex) => {
         .unsigned()
         .references("id")
         .inTable("carts")
-        .notNullable();
+        .notNullable()
+        .onDelete("CASCADE");
       table
         .integer("product_id")
         .unsigned()
         .references("id")
         .inTable("products")
-        .notNullable();
+        .notNullable()
+        .onDelete("CASCADE");
       table
         .integer("variant_id")
         .unsigned()
         .references("id")
         .inTable("variants")
-        .notNullable();
+        .notNullable()
+        .onDelete("CASCADE");
       table.integer("quantity").notNullable().notNullable();
+    })
+    .createTable("order_statuses", (table) => {
+      table.increments("id").primary();
+      table.string("status_name").notNullable();
     })
     .createTable("orders", (table) => {
       table.increments("id").primary();
@@ -131,18 +145,22 @@ exports.up = (knex) => {
         .unsigned()
         .references("id")
         .inTable("users")
-        .notNullable();
+        .notNullable()
+        .onDelete("CASCADE");
       table
         .integer("address_id")
         .unsigned()
         .references("id")
         .inTable("addresses")
-        .notNullable();
-      table.string("status").notNullable();
-    })
-    .createTable("order_statuses", (table) => {
-      table.increments("id").primary();
-      table.string("status_name").notNullable();
+        .notNullable()
+        .onDelete("CASCADE");
+      table
+        .integer("status")
+        .unsigned()
+        .references("id")
+        .inTable("order_statuses")
+        .notNullable()
+        .onDelete("CASCADE");
     })
     .createTable("order_details", (table) => {
       table.increments("id").primary();
@@ -151,13 +169,15 @@ exports.up = (knex) => {
         .unsigned()
         .references("id")
         .inTable("orders")
-        .notNullable();
+        .notNullable()
+        .onDelete("CASCADE");
       table
         .integer("product_id")
         .unsigned()
         .references("id")
         .inTable("products")
-        .notNullable();
+        .notNullable()
+        .onDelete("CASCADE");
       table
         .integer("variant_id")
         .unsigned()
@@ -174,13 +194,15 @@ exports.up = (knex) => {
         .unsigned()
         .references("id")
         .inTable("products")
-        .notNullable();
+        .notNullable()
+        .onDelete("CASCADE");
       table
         .integer("user_id")
         .unsigned()
         .references("id")
         .inTable("users")
-        .notNullable();
+        .notNullable()
+        .onDelete("CASCADE");
       table.integer("rating").notNullable();
       table.string("comment");
     });
