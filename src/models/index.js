@@ -1,61 +1,66 @@
-module.exports = ({
-  knex = require("../database/db.js"),
-  name = "",
-  tableName = "",
-  selectableProps = [],
-  timeout = 1000,
-}) => {
-  const query = knex.from(tableName);
+class Model {
+  query;
 
-  const create = (props) => {
+  constructor({
+    knex = require("../database/db.js"),
+    name = "",
+    tableName = "",
+    selectableProps = [],
+    timeout = 1000,
+  }) {
+    this.knex = knex;
+    this.name = name;
+    this.tableName = tableName;
+    this.selectableProps = selectableProps;
+    this.timeout = timeout;
+    this.query = knex(tableName);
+  }
+
+  create(props) {
     delete props.id;
-    return knex.insert(props).into(tableName).timeout(timeout);
-  };
+    return this.knex.insert(props).into(this.tableName).timeout(this.timeout);
+  }
 
-  const findAll = () => {
-    return knex.select(selectableProps).from(tableName).timeout(timeout);
-  };
+  findAll() {
+    return this.knex
+      .select(this.selectableProps)
+      .from(this.tableName)
+      .timeout(this.timeout);
+  }
 
-  const find = (filters) => {
-    return knex
-      .select(selectableProps)
-      .from(tableName)
+  find(filters) {
+    return this.knex
+      .select(this.selectableProps)
+      .from(this.tableName)
       .where(filters)
-      .timeout(timeout);
-  };
+      .timeout(this.timeout);
+  }
 
-  const update = (id, props) => {
+  update(id, props) {
     delete props.id;
 
-    return knex
+    return this.knex
       .update(props)
-      .from(tableName)
+      .from(this.tableName)
       .where({
         id,
       })
-      .timeout(timeout);
-  };
+      .timeout(this.timeout);
+  }
 
-  const destroy = (id) => {
-    return knex
+  destroy(id) {
+    return this.knex
       .del()
-      .from(tableName)
+      .from(this.tableName)
       .where({
         id,
       })
-      .timeout(timeout);
-  };
+      .timeout(this.timeout);
+  }
 
-  return {
-    query,
-    name,
-    tableName,
-    selectableProps,
-    timeout,
-    create,
-    findAll,
-    find,
-    update,
-    destroy,
-  };
-};
+  select(columns) {
+    return this.knex.select(columns).from(this.tableName);
+  }
+}
+
+module.exports = Model;
