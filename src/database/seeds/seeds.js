@@ -19,7 +19,7 @@ const ratings = require("./mocks/ratings");
  */
 exports.seed = async function (knex) {
   await knex("users").del();
-  await knex("users").insert(users);
+  await knex("users").insert(await users());
   await knex("addresses").del();
   await knex("addresses").insert(addresses);
   await knex("categories").del();

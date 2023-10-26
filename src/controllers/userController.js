@@ -1,26 +1,14 @@
 const { generateHash } = require("../services/bcrypt.js");
 
-const User = require("../models/user.js");
+const UserRepository = require("../repositories/user.js");
 
 const UserController = {
   async getAllUsers() {
-    try {
-      return await User.findAll();
-    } catch (error) {
-      throw new Error("Internal server error");
-    }
+    return await UserRepository.all();
   },
 
   async getUserById(id) {
-    try {
-      const [user] = await User.find({ id });
-      if (!user) {
-        return new Error("User not found");
-      }
-      return user;
-    } catch (error) {
-      throw new Error("Internal server error");
-    }
+    return await UserRepository.findById(id);
   },
 
   async createUser(args) {
@@ -29,23 +17,16 @@ const UserController = {
       const hashedPassword = await generateHash(userData.password_hash);
       userData.password_hash = hashedPassword;
       userData.role = "customer";
-      return await User.create(userData);
+      return await UserRepository.create(userData);
     } catch (error) {
-      if (error.errno === 1062) {
-        throw new Error("E-mail already registered!");
-      }
-      throw new Error("Internal server error!");
+      throw new Error(error.message);
     }
   },
 
   async updateUser(args) {
     try {
-      const userId = args.id;
-      const updatedUserData = { ...args };
-      const updatedUser = await User.update(userId, updatedUserData);
-      if (!updatedUser) {
-        throw new Error("User not found");
-      }
+      await UserRepository.update(args.id, args);
+      return { msg: "Updated!" };
     } catch (error) {
       throw new Error(error.message);
     }
@@ -53,10 +34,7 @@ const UserController = {
 
   async deleteUser(id) {
     try {
-      const deletedUser = await User.destroy(id);
-      if (!deletedUser || deletedUser.length === 0) {
-        throw new Error("User not found");
-      }
+      await UserRepository.delete(id);
     } catch (error) {
       throw new Error(error.message);
     }
@@ -64,11 +42,7 @@ const UserController = {
 
   async findUsers(args) {
     try {
-      const users = await User.find(args);
-      if (!users || !users.length) {
-        throw new Error("No user found");
-      }
-      return users;
+      return await UserRepository.find(args);
     } catch (error) {
       throw new Error(error.message);
     }
