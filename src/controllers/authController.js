@@ -1,6 +1,7 @@
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const { compareStringToHash } = require("../services/bcrypt.js");
+const JWTsecret = process.env.JWT_SECRET;
 
 const UserController = require("./userController.js");
 
@@ -8,7 +9,9 @@ const AuthController = {
   async login({ email, password_hash }) {
     try {
       if (!password_hash || !email) {
-        throw new Error("No Password or Email");
+        throw new Error(
+          JSON.stringify({ msg: "No Password or Email", status: 401 })
+        );
       }
       const [user] = await UserController.findUsers({ email });
       const passwordMatch = await compareStringToHash(
@@ -16,11 +19,11 @@ const AuthController = {
         user.password_hash
       );
       if (!passwordMatch) {
-        throw new Error("Wrong Password");
+        throw new Error(JSON.stringify({ msg: "Wrong Password", status: 401 }));
       }
 
-      const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
-        expiresIn: "3h",
+      const token = jwt.sign({ userId: user.id }, JWTsecret, {
+        expiresIn: "5m",
       });
       delete user.password_hash;
       return { user, token };
