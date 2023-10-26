@@ -3,8 +3,8 @@ const { generateHash } = require("../services/bcrypt.js");
 const UserRepository = require("../repositories/user.js");
 
 const UserController = {
-  async getAllUsers() {
-    return await UserRepository.all();
+  async getAllUsers(pagination) {
+    return await UserRepository.all(pagination);
   },
 
   async getUserById(id) {

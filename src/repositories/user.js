@@ -3,19 +3,22 @@ const User = require("../models/user");
 class UserRepository {
   users;
   constructor() {
-    this.fetchUsers();
+    this.users = this.fetchUsers();
   }
 
   async fetchUsers() {
     try {
-      this.users = await User.findAll();
+      return await User.findAll();
     } catch (error) {
       throw new Error(error.message);
     }
   }
 
-  all() {
-    return this.users;
+  async all(pagination) {
+    console.log(pagination);
+    return pagination
+      ? await User.findAll().paginate(pagination)
+      : await User.findAll();
   }
 
   async findById(id) {
@@ -70,9 +73,11 @@ class UserRepository {
     }
   }
 
-  async find(args) {
+  async find(args, pagination) {
     try {
-      const users = await User.find(args);
+      const users = pagination
+        ? await User.find(args).paginate(pagination)
+        : await User.find(args);
       if (!users || !users.length) {
         throw new Error("No user found");
       }
