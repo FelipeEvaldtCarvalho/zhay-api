@@ -1,4 +1,6 @@
 const bcrypt = require("bcryptjs");
+const uuid = require("uuid");
+
 require("dotenv").config();
 
 const generateHash = async (inputString) => {
@@ -20,4 +22,6 @@ const compareStringToHash = async (inputString, hashedString) => {
   }
 };
 
-module.exports = { generateHash, compareStringToHash };
+const generateUuid = () => uuid.v4();
+
+module.exports = { generateHash, compareStringToHash, generateUuid };
