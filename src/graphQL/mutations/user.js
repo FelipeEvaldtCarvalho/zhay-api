@@ -14,7 +14,7 @@ const userMutations = {
     },
     resolve: async (_, args) => {
       try {
-        await UserController.createUser(args);
+        // await UserController.createUser(args);
         return { success: "User created successfully.", error: false };
       } catch (error) {
         return { success: false, error: error.message };
