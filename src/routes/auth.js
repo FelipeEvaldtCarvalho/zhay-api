@@ -23,8 +23,7 @@ router.get("/loged", loged, async (_, res) => {
 router.post("/confirm-email", async (req, res) => {
   try {
     const { token } = req.body;
-    const confirm = await authController.confirmEmail(token);
-    console.dir(confirm);
+    await authController.confirmEmail(token);
     res.status(200).send("Email confirmed!");
   } catch (error) {
     res.json(error.message);
