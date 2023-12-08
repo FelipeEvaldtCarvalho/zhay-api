@@ -9,9 +9,11 @@ exports.up = (knex) => {
       table.string("name").notNullable();
       table.string("email").notNullable().unique();
       table.string("password_hash", 64).notNullable();
-      table.string("role").notNullable();
+      table.string("role").notNullable().defaultTo("customer");
       table.bigInteger("cpf").nullable().unique();
       table.string("phone").nullable();
+      table.boolean("confirmed_email").defaultTo(false);
+      table.string("token");
     })
     .createTable("addresses", (table) => {
       table.increments("id").primary();

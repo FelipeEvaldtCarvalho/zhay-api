@@ -3,7 +3,7 @@ const router = express.Router();
 const authRouter = require("./auth");
 const userRouter = require("./user");
 
-router.get("/", (req, res) => {
+router.get("/", (_, res) => {
   res.send("Hell on World!!!");
 });
 
